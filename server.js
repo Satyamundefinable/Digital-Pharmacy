@@ -9,11 +9,12 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const allowedOrigin = process.env.CORS_ORIGIN;
 
 
 //in-built middlewares
 app.use(cors({
-    origin : process.env.CORS_ORIGIN,
+    origin : allowedOrigin,
     credentials : true
 }))
 app.options(/.*/, cors());
@@ -39,7 +40,11 @@ app.use("/api/medicines", medicineRouter);
 try {
     connectDB()
     .then(() => {
-    app.listen(PORT, () => console.log("Server running on Port : ", PORT)
+    app.listen(PORT, () => {
+        console.log("Origin : ", allowedOrigin);
+        
+        console.log("Server running on Port : ", PORT)
+    } 
     )
 })
     .catch((error) => {
