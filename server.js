@@ -9,12 +9,9 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const allowedOrigins = process.env.CORS_ORIGIN.split(",");
+const allowedOrigins = process.env.CORS_ORIGIN.split(",").map(origin => origin.trim());
 
 //in-built middlewares
-app.use(express.json());
-app.use(cookieParser());
-
 app.use(cors({
   origin: function (origin, callback) {
     // Allow requests without origin (Postman, mobile apps)
@@ -28,6 +25,11 @@ app.use(cors({
   },
   credentials: true
 }));
+app.options("*", cors());
+app.use(express.json());
+app.use(cookieParser());
+
+
 app.use(urlencoded({ extended: true, limit: "16kb" }));
 //define api
 app.use("/api/auth", router);
