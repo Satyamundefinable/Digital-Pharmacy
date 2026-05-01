@@ -9,22 +9,13 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const allowedOrigins = process.env.CORS_ORIGIN.split(",").map(origin => origin.trim());
+
 
 //in-built middlewares
 app.use(cors({
-  origin: function (origin, callback) {
-    // Allow requests without origin (Postman, mobile apps)
-    if (!origin) return callback(null, true);
-
-    if (allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("CORS not allowed: " + origin));
-    }
-  },
-  credentials: true
-}));
+    origin : process.env.CORS_ORIGIN,
+    credentials : true
+}))
 app.options(/.*/, cors());
 app.use(express.json());
 app.use(cookieParser());
