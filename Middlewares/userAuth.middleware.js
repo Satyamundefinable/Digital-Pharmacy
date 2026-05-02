@@ -3,16 +3,16 @@ import jwt from "jsonwebtoken"
 
 const userAuth = async (req, res, next) => {
    try {
-     const token = req.cookies?.refreshToken;
+     const token = req.cookies?.refreshToken || req.headers.authorization?.split(" ")[1];
 
     if (!token) {
-      return res.status(402).json({
+      return res.status(401).json({
         success : false,
         message : "Not authorized"
       })
     };
 
-    const decodedToken = jwt.verify(token, process.env.REFRESH_TOKEN);
+    const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN);
 
     if (!decodedToken) return;
 
